@@ -1,10 +1,12 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import React from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-import { employeesLoaded } from '../redux/actions'
+import { employeesLoaded } from "../redux/actions";
 
-const EmployeeLine = ({ employee }) => <div>{employee.name} ({employee.age} yrs old): {employee.company}</div>
+const EmployeeLine = ({ employee }) => <div>
+  {employee.name} ({employee.age} yrs old): {employee.company}
+  </div>
 
 class PageEmployeesList extends React.Component {
 
@@ -12,11 +14,13 @@ class PageEmployeesList extends React.Component {
     super(props);
 
     this.state = { 
-      isLoading: false,
+      isLoading: false
     }
   }
 
   componentDidMount() {
+    if(!this.props.isFetched){
+
     this.setState({ isLoading: true });
     fetch('http://localhost:3004/employees')
     .then((data) => data.json())
@@ -27,6 +31,8 @@ class PageEmployeesList extends React.Component {
       this.props.employeesLoaded(employees);
       this.setState({ isLoading: false });
     });
+    }
+   
   }
 
   render() {
@@ -51,7 +57,8 @@ class PageEmployeesList extends React.Component {
 
 const mapStateToProps = (state /*, ownProps*/) => {
   return {
-    employees: state.employees
+    employees: state.employees,
+    isFetched: state.isFetched
   }
 }
 
